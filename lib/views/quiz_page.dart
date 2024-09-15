@@ -34,7 +34,7 @@ class _QuizPageState extends State<QuizPage> {
 
     questionsAndAnswers = [
       QuestionAndAnswersModel(
-        question: "Who is Batman True Identity?",
+        question: "What is Batman True Identity?",
         correctAnswer: '${correctAnswers[0]}',
         answers: [
           'Harvey Dent',
@@ -113,150 +113,155 @@ class _QuizPageState extends State<QuizPage> {
         ),
         backgroundColor: Color(0xff86948F),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          CircleAvatar(
-            radius: 80,
-            backgroundImage: AssetImage(
-              'assets/images/Ellipse 1.png',
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-            margin: EdgeInsets.symmetric(horizontal: 28),
-            decoration: BoxDecoration(
-              color: Color(0xffB8E893),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
+      body: SingleChildScrollView(
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              CircleAvatar(
+                radius: 80,
+                backgroundImage: AssetImage(
+                  'assets/images/Ellipse 1.png',
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                margin: EdgeInsets.symmetric(horizontal: 28),
+                decoration: BoxDecoration(
+                  color: Color(0xffB8E893),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Spacer(),
+                    Row(
+                      children: [
+                        Spacer(),
+                        Text(
+                          '${index + 1} / $totalQuestions',
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      ],
+                    ),
                     Text(
-                      '${index + 1} / $totalQuestions',
-                      style: TextStyle(fontSize: 18),
+                      questionsAndAnswers[index].question,
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 9),
+                      child: AnswerTextWidget(
+                        text: questionsAndAnswers[index].answers[0],
+                        correctAnswer: questionsAndAnswers[index].correctAnswer,
+                        isSelected: questionsAndAnswers[index].answers[0] ==
+                            selectedAnswer,
+                        showCorrectAnswer: showCorrectAnswer,
+                        isClickable: isClickable,
+                        onTap: () => handleAnswerSelection(
+                            questionsAndAnswers[index].answers[0]),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 9),
+                      child: AnswerTextWidget(
+                        text: questionsAndAnswers[index].answers[1],
+                        correctAnswer: questionsAndAnswers[index].correctAnswer,
+                        isSelected: questionsAndAnswers[index].answers[1] ==
+                            selectedAnswer,
+                        showCorrectAnswer: showCorrectAnswer,
+                        isClickable: isClickable,
+                        onTap: () => handleAnswerSelection(
+                            questionsAndAnswers[index].answers[1]),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 9),
+                      child: AnswerTextWidget(
+                        text: questionsAndAnswers[index].answers[2],
+                        correctAnswer: questionsAndAnswers[index].correctAnswer,
+                        isSelected: questionsAndAnswers[index].answers[2] ==
+                            selectedAnswer,
+                        showCorrectAnswer: showCorrectAnswer,
+                        isClickable: isClickable,
+                        onTap: () => handleAnswerSelection(
+                            questionsAndAnswers[index].answers[2]),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 9),
+                      child: AnswerTextWidget(
+                        text: questionsAndAnswers[index].answers[3],
+                        correctAnswer: questionsAndAnswers[index].correctAnswer,
+                        isSelected: questionsAndAnswers[index].answers[3] ==
+                            selectedAnswer,
+                        showCorrectAnswer: showCorrectAnswer,
+                        isClickable: isClickable,
+                        onTap: () => handleAnswerSelection(
+                            questionsAndAnswers[index].answers[3]),
+                      ),
+                    ),
+                    Center(
+                      child: CustomElevatedButton(
+                        textColor: Colors.white,
+                        backgroundColor: Color(0xff86948F),
+                        text: 'NEXT',
+                        onPressed: () {
+                          if (selectedAnswer == null) {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: const Text(
+                                    "You can't proceed",
+                                    style: TextStyle(fontSize: 27),
+                                  ),
+                                  content: const Text(
+                                    "Please Select an Answer",
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: const Text("OK"),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          } else if (index < totalQuestions - 1) {
+                            setState(() {
+                              index++;
+                              isClickable = true;
+                              selectedAnswer = null;
+                              showCorrectAnswer = false;
+                            });
+                          } else {
+                            Navigator.pushNamed(
+                              context,
+                              CongratulationPage.routeName,
+                              arguments: {
+                                'name': name,
+                                "result": result,
+                                'totalAnswers': totalQuestions
+                              },
+                            );
+                          }
+                        },
+                      ),
                     ),
                   ],
                 ),
-                Text(
-                  questionsAndAnswers[index].question,
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 9),
-                  child: AnswerTextWidget(
-                    text: questionsAndAnswers[index].answers[0],
-                    correctAnswer: questionsAndAnswers[index].correctAnswer,
-                    isSelected:
-                        questionsAndAnswers[index].answers[0] == selectedAnswer,
-                    showCorrectAnswer: showCorrectAnswer,
-                    isClickable: isClickable,
-                    onTap: () => handleAnswerSelection(
-                        questionsAndAnswers[index].answers[0]),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 9),
-                  child: AnswerTextWidget(
-                    text: questionsAndAnswers[index].answers[1],
-                    correctAnswer: questionsAndAnswers[index].correctAnswer,
-                    isSelected:
-                        questionsAndAnswers[index].answers[1] == selectedAnswer,
-                    showCorrectAnswer: showCorrectAnswer,
-                    isClickable: isClickable,
-                    onTap: () => handleAnswerSelection(
-                        questionsAndAnswers[index].answers[1]),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 9),
-                  child: AnswerTextWidget(
-                    text: questionsAndAnswers[index].answers[2],
-                    correctAnswer: questionsAndAnswers[index].correctAnswer,
-                    isSelected:
-                        questionsAndAnswers[index].answers[2] == selectedAnswer,
-                    showCorrectAnswer: showCorrectAnswer,
-                    isClickable: isClickable,
-                    onTap: () => handleAnswerSelection(
-                        questionsAndAnswers[index].answers[2]),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 9),
-                  child: AnswerTextWidget(
-                    text: questionsAndAnswers[index].answers[3],
-                    correctAnswer: questionsAndAnswers[index].correctAnswer,
-                    isSelected:
-                        questionsAndAnswers[index].answers[3] == selectedAnswer,
-                    showCorrectAnswer: showCorrectAnswer,
-                    isClickable: isClickable,
-                    onTap: () => handleAnswerSelection(
-                        questionsAndAnswers[index].answers[3]),
-                  ),
-                ),
-                Center(
-                  child: CustomElevatedButton(
-                    textColor: Colors.white,
-                    backgroundColor: Color(0xff86948F),
-                    text: 'NEXT',
-                    onPressed: () {
-                      if (selectedAnswer == null) {
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: const Text(
-                                "You can't proceed",
-                                style: TextStyle(fontSize: 27),
-                              ),
-                              content: const Text(
-                                "Please Select an Answer",
-                                style: TextStyle(
-                                  fontSize: 20,
-                                ),
-                              ),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: const Text("OK"),
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      } else if (index < totalQuestions - 1) {
-                        setState(() {
-                          index++;
-                          isClickable = true;
-                          selectedAnswer = null;
-                          showCorrectAnswer = false;
-                        });
-                      } else {
-                        Navigator.pushNamed(
-                          context,
-                          CongratulationPage.routeName,
-                          arguments: {
-                            'name': name,
-                            "result": result,
-                            'totalAnswers': totalQuestions
-                          },
-                        );
-                      }
-                    },
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

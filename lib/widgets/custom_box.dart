@@ -30,6 +30,7 @@ class CustomBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
+      alignment: Alignment.topCenter,
       clipBehavior: Clip.none,
       children: [
         Container(
